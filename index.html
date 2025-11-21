@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compost Cycle - App Móvil</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        const { Menu, X, Home, BookOpen, Award, User, MapPin, HelpCircle, MessageSquare, Leaf, ChevronDown, ChevronRight, CheckCircle, Clock, Star, Mail, Phone, Users, TrendingUp, BarChart3 } = lucide;
+
+        const CompostCycleApp = () => {
+          const [currentPage, setCurrentPage] = useState('home');
+          const [menuOpen, setMenuOpen] = useState(false);
+          const [expandedSection, setExpandedSection] = useState(null);
+
+          const userProfile = {
+            name: "Usuario Eco",
+            level: 5,
+            compostCreated: "45 kg",
+            co2Saved: "120 kg",
+            daysActive: 89,
+            residenceType: "casa"
+          };
+
+          const steps = [
+            { title: "Paso 1: Preparación", content: "Consigue un contenedor con tapa y ventilación.", tips: ["Tamaño ideal: 1m³", "Debe tener agujeros", "Ubicación: zona fresca"] },
+            { title: "Paso 2: Materiales Verdes", content: "Agrega residuos ricos en nitrógeno: frutas, verduras, café.", tips: ["Corta en pedazos pequeños", "No exceso de cítricos", "Evita alimentos cocidos"] },
+            { title: "Paso 3: Materiales Marrones", content: "Añade materiales de carbono: hojas secas, papel, cartón.", tips: ["Proporción 2:1", "Tritura las ramas", "Cartón sin cinta"] },
+            { title: "Paso 4: Mantenimiento", content: "Mezcla cada 3-4 días, mantén húmedo. Temperatura: 55-65°C.", tips: ["Revuelve con pala", "Riega si está seco", "Cubre si está húmedo"] },
+            { title: "Paso 5: Maduración", content: "Espera 2-3 meses. El compost está listo cuando es oscuro.", tips: ["Color café oscuro", "Textura esponjosa", "Olor a bosque"] }
+          ];
+
+          const NavButton = ({ icon: Icon, label, page }) => (
+            <button onClick={() => { setCurrentPage(page); setMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${currentPage === page ? 'bg-green-600 text-white' : 'text-gray-700 hover:bg-green-50'}`}>
+              <Icon size={20} />
+              <span className="font-medium">{label}</span>
+            </button>
+          );
+
+          const renderHome = () => (
+            <div className="space-y-6">
+              <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-6 rounded-2xl shadow-lg">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="text-6xl">🌿</div>
+                  <h1 className="text-4xl font-bold text-green-800 text-center">COMPOSTCYCLE</h1>
+                  <div className="flex gap-2 text-4xl"><span>🍃</span><span>🍃</span></div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-6 rounded-2xl shadow-lg">
+                <h2 className="text-2xl font-bold mb-2">¡Bienvenido/a, {userProfile.name}! 👋</h2>
+                <p className="text-green-50 mb-3">Es un placer tenerte aquí. Juntos estamos construyendo un futuro más sostenible.</p>
+                <div className="bg-white/20 backdrop-blur rounded-lg p-3 flex items-center gap-2">
+                  <Leaf size={20} />
+                  <span className="text-sm">¡Sigamos compostando!</span>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-green-600 to-green-800 text-white p-8 rounded-2xl shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <Leaf size={40} />
+                  <div>
+                    <h2 className="text-2xl font-bold">Tu Impacto Ambiental</h2>
+                    <p className="text-green-100">Transforma residuos en recursos</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-4 mt-6">
+                  <div className="bg-white/20 rounded-lg p-3 text-center backdrop-blur">
+                    <div className="text-2xl font-bold">{userProfile.compostCreated}</div>
+                    <div className="text-sm text-green-100">Compost creado</div>
+                  </div>
+                  <div className="bg-white/20 rounded-lg p-3 text-center backdrop-blur">
+                    <div className="text-2xl font-bold">{userProfile.co2Saved}</div>
+                    <div className="text-sm text-green-100">CO₂ ahorrado</div>
+                  </div>
+                  <div className="bg-white/20 rounded-lg p-3 text-center backdrop-blur">
+                    <div className="text-2xl font-bold">{userProfile.daysActive}</div>
+                    <div className="text-sm text-green-100">Días activo</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <h2 className="text-xl font-bold text-gray-800 mb-4">¿Qué alimentos puedo compostar?</h2>
+                <div className="mb-6">
+                  <h3 className="font-semibold text-green-700 mb-3">✅ PUEDES compostar:</h3>
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    {[{icon:'🍎',label:'Frutas'},{icon:'🥕',label:'Verduras'},{icon:'☕',label:'Café'},{icon:'🥚',label:'Cáscaras'},{icon:'🍃',label:'Hojas'},{icon:'🌾',label:'Cereales'}].map((item,idx)=>(
+                      <div key={idx} className="bg-green-50 p-3 rounded-lg text-center">
+                        <div className="text-3xl mb-1">{item.icon}</div>
+                        <div className="text-xs text-gray-700">{item.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <h3 className="font-semibold text-red-700 mb-3">❌ NO compostar:</h3>
+                  <div className="grid grid-cols-3 gap-3">
+                    {[{icon:'🥩',label:'Carnes'},{icon:'🧀',label:'Lácteos'},{icon:'🍕',label:'Grasas'},{icon:'🐕',label:'Heces'},{icon:'🦴',label:'Huesos'},{icon:'🧪',label:'Químicos'}].map((item,idx)=>(
+                      <div key={idx} className="bg-red-50 p-3 rounded-lg text-center border border-red-200">
+                        <div className="text-3xl mb-1">{item.icon}</div>
+                        <div className="text-xs text-gray-700">{item.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <button onClick={()=>setCurrentPage('guide')} className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">Comenzar mi compost</button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-20">
+                <button onClick={()=>setCurrentPage('greenPoints')} className="bg-blue-50 border-2 border-blue-200 p-4 rounded-xl hover:bg-blue-100 transition">
+                  <MapPin className="mx-auto mb-2 text-blue-600" size={32}/>
+                  <div className="font-semibold text-blue-900">Puntos Verdes</div>
+                </button>
+                <button onClick={()=>setCurrentPage('benefits')} className="bg-purple-50 border-2 border-purple-200 p-4 rounded-xl hover:bg-purple-100 transition">
+                  <Star className="mx-auto mb-2 text-purple-600" size={32}/>
+                  <div className="font-semibold text-purple-900">Beneficios</div>
+                </button>
+              </div>
+            </div>
+          );
+
+          const renderGuide = () => (
+            <div className="space-y-4 mb-20">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Guía Paso a Paso</h2>
+              {steps.map((step,idx)=>(
+                <div key={idx} className="bg-white rounded-xl shadow-md overflow-hidden">
+                  <button onClick={()=>setExpandedSection(expandedSection===idx?null:idx)} className="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">{idx+1}</div>
+                      <h3 className="font-semibold text-gray-800">{step.title}</h3>
+                    </div>
+                    {expandedSection===idx?<ChevronDown/>:<ChevronRight/>}
+                  </button>
+                  {expandedSection===idx&&(
+                    <div className="px-5 pb-5 border-t">
+                      <p className="text-gray-600 mt-4 mb-3">{step.content}</p>
+                      <div className="bg-green-50 p-3 rounded-lg">
+                        <div className="font-semibold text-green-800 mb-2">💡 Tips:</div>
+                        <ul className="space-y-1">
+                          {step.tips.map((tip,i)=><li key={i} className="text-sm text-green-700">• {tip}</li>)}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          );
+
+          const renderBenefits = () => (
+            <div className="space-y-4 mb-20">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Beneficios</h2>
+              {[{icon:"🌍",title:"Reduce Emisiones",desc:"8% de gases invernadero"},{icon:"♻️",title:"Reduce Residuos",desc:"50% de residuos orgánicos"},{icon:"🌱",title:"Mejora el Suelo",desc:"Más fertilidad"}].map((b,i)=>(
+                <div key={i} className="bg-white rounded-xl shadow-md p-5">
+                  <div className="flex items-start gap-4">
+                    <div className="text-4xl">{b.icon}</div>
+                    <div>
+                      <h3 className="font-bold text-gray-800 mb-1">{b.title}</h3>
+                      <p className="text-gray-600 text-sm">{b.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+
+          const renderProfile = () => (
+            <div className="space-y-4 mb-20">
+              <div className="bg-gradient-to-br from-green-600 to-green-700 text-white rounded-xl p-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-20 h-20 bg-white/30 rounded-full flex items-center justify-center text-4xl">👤</div>
+                  <div>
+                    <h2 className="text-2xl font-bold">{userProfile.name}</h2>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Star size={16} fill="gold" color="gold"/>
+                      <span>Nivel {userProfile.level}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded-xl shadow-md p-5">
+                <h3 className="font-bold text-gray-800 mb-3">🏡 Tipo de Residencia</h3>
+                <div className="grid grid-cols-3 gap-2 mb-4">
+                  {[{type:'casa',icon:'🏠',label:'Casa'},{type:'departamento',icon:'🏢',label:'Depto'},{type:'otro',icon:'🏘️',label:'Otro'}].map(item=>(
+                    <button key={item.type} className={`p-3 rounded-lg border-2 transition ${userProfile.residenceType===item.type?'border-green-600 bg-green-50':'border-gray-200 bg-gray-50'}`}>
+                      <div className="text-2xl mb-1">{item.icon}</div>
+                      <div className="text-xs font-medium">{item.label}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+
+          const renderStats = () => (
+            <div className="space-y-4 mb-20">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white p-6 rounded-2xl">
+                <div className="flex items-center gap-3">
+                  <TrendingUp size={32}/>
+                  <h2 className="text-2xl font-bold">Estadísticas</h2>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-white rounded-xl shadow-md p-4 text-center">
+                  <div className="text-3xl font-bold text-green-600">105</div>
+                  <div className="text-xs text-gray-600 mt-1">kg Compost</div>
+                </div>
+                <div className="bg-white rounded-xl shadow-md p-4 text-center">
+                  <div className="text-3xl font-bold text-blue-600">280</div>
+                  <div className="text-xs text-gray-600 mt-1">kg CO₂</div>
+                </div>
+                <div className="bg-white rounded-xl shadow-md p-4 text-center">
+                  <div className="text-3xl font-bold text-purple-600">0.9</div>
+                  <div className="text-xs text-gray-600 mt-1">kg/día</div>
+                </div>
+              </div>
+            </div>
+          );
+
+          const renderContact = () => (
+            <div className="space-y-4 mb-20">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Contacto</h2>
+              <div className="bg-gradient-to-br from-green-600 to-green-700 text-white rounded-xl p-6">
+                <h3 className="font-bold text-xl mb-2">Equipo Compost Cycle</h3>
+                <p className="text-green-100 text-sm">Desarrolladores comprometidos</p>
+              </div>
+              <div className="bg-white rounded-xl shadow-md p-5">
+                <h3 className="font-bold text-gray-800 mb-4">Creadores</h3>
+                {['Andy Navarrete','Samuel Catrileo','Raimundo Larrain','Diego Vallejo'].map((name,i)=>(
+                  <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg mb-2">
+                    <div className="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">{name.charAt(0)}</div>
+                    <div className="font-medium text-gray-800">{name}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+
+          const pages = {
+            home: renderHome,
+            guide: renderGuide,
+            benefits: renderBenefits,
+            profile: renderProfile,
+            stats: renderStats,
+            contact: renderContact
+          };
+
+          return (
+            <div className="min-h-screen bg-gray-50">
+              <div className="bg-green-600 text-white p-4 shadow-lg sticky top-0 z-50">
+                <div className="flex items-center justify-between max-w-md mx-auto">
+                  <div className="flex items-center gap-2">
+                    <Leaf size={28}/>
+                    <span className="text-xl font-bold">Compost Cycle</span>
+                  </div>
+                  <button onClick={()=>setMenuOpen(!menuOpen)} className="p-2 hover:bg-green-700 rounded-lg transition">
+                    {menuOpen?<X size={24}/>:<Menu size={24}/>}
+                  </button>
+                </div>
+              </div>
+
+              <div className={`fixed inset-0 bg-black/50 z-40 transition-opacity ${menuOpen?'opacity-100':'opacity-0 pointer-events-none'}`} onClick={()=>setMenuOpen(false)}/>
+              
+              <div className={`fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-50 transition-transform ${menuOpen?'translate-x-0':'translate-x-full'}`}>
+                <div className="p-4 space-y-2 mt-16">
+                  <NavButton icon={Home} label="Inicio" page="home"/>
+                  <NavButton icon={BookOpen} label="Guía" page="guide"/>
+                  <NavButton icon={Star} label="Beneficios" page="benefits"/>
+                  <NavButton icon={User} label="Perfil" page="profile"/>
+                  <NavButton icon={TrendingUp} label="Estadísticas" page="stats"/>
+                  <NavButton icon={Users} label="Contacto" page="contact"/>
+                </div>
+              </div>
+
+              <div className="max-w-md mx-auto p-4 pb-20">
+                {pages[currentPage]?pages[currentPage]():renderHome()}
+              </div>
+
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg">
+                <div className="max-w-md mx-auto flex justify-around p-2">
+                  {[{icon:Home,page:'home',label:'Inicio'},{icon:BookOpen,page:'guide',label:'Guía'},{icon:MapPin,page:'greenPoints',label:'Puntos'},{icon:User,page:'profile',label:'Perfil'}].map(({icon:Icon,page,label})=>(
+                    <button key={page} onClick={()=>setCurrentPage(page)} className={`flex flex-col items-center p-2 rounded-lg transition ${currentPage===page?'text-green-600':'text-gray-400'}`}>
+                      <Icon size={24}/>
+                      <span className="text-xs mt-1">{label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<CompostCycleApp/>);
+    </script>
+</body>
+</html>
